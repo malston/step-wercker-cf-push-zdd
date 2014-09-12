@@ -2,23 +2,34 @@ import json
 import sys
 import re
 
-jsonStr = ""
+def stdinGen():
+  for line in sys.stdin:
+    yield line
 
-for line in sys.stdin:
-  jsonStr += line
+def readPipeAsString():
+  return ''.join(stdinGen())
 
-j = json.loads(jsonStr)
+def getJsonObject():
+  return json.loads(readPipeAsString())
 
-def getApp(j):
+def findAppNameMatch(name):
+  return re.match( sys.argv[1]+'-([0-9a-f]{5,40})', name, re.M|re.I)
+
+def appIsRunning(state):
+  return state != "STOPPED"
+
+def getApp():
+    j = getJsonObject()
     rval = "notfound"
 
     for i in j["resources"]:
         e = i["entity"]
-        matchObj = re.match( sys.argv[1]+'-([0-9a-f]{5,40})', e["name"], re.M|re.I)
-        
-        if matchObj and e["state"] != "STOPPED":
-            rval = str(e["name"])+"|"+str(e["instances"])+"|"+str(e["memory"])+"|"+str(e["disk_quota"])
+        name = e["name"]
+
+        if findAppNameMatch(name) and appIsRunning(e["state"]):
+            rval = str(name)+"|"+str(e["instances"])+"|"+str(e["memory"])+"|"+str(e["disk_quota"])
             break
 
     return rval
-print(getApp(j))
+
+print(getApp())
