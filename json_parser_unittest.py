@@ -2,7 +2,7 @@ import unittest
 import json_parser
 import json
 
-class PrimesTestCase(unittest.TestCase):
+class ParserTestCase(unittest.TestCase):
     """Tests for `primes.py`."""
 
     def test_appIsRunning(self):
