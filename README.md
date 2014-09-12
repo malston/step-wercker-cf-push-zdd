@@ -1,4 +1,4 @@
-step-wercker-cf-push
+step-wercker-cf-push-zdd
 ====================
 
 a wercker step to do a Zero Downtime Deploy push to cloud foundry
@@ -9,7 +9,7 @@ SAMPLE USAGE:
 ```
 deploy:
   steps:
-    - xchapter7x/cf-push:
+    - xchapter7x/cf-push-zdd:
         cloudfoundry_user_name: $cfuser
         cloudfoundry_user_pass: $cfpass
         cloudfoundry_org: $cforg
