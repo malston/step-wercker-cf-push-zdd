@@ -3,7 +3,7 @@ import json_parser
 import json
 
 class ParserTestCase(unittest.TestCase):
-    """Tests for `primes.py`."""
+    """Tests for `json_parser.py`."""
 
     def test_appIsRunning(self):
         """appIsRunning should return false if stopped status and true if started status"""
