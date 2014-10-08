@@ -8,8 +8,10 @@ build:
         name: Make sure python is there
         code: |
           sudo apt-get install -y python
+          sudo apt-get install libxslt-dev libxml2-dev libevent-dev
+          sudo pip install pyvows
 
     - script:
         name: Run some basic unit tests
         code: |
-          python json_parser_unittest.py
+          pyvows --pattern='*_unittest.py'
