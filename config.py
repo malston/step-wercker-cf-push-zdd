@@ -7,6 +7,7 @@ class Config():
     self.INSTANCES = "NUM_INSTANCES"
     self.MEMORY = "MEMORY"
     self.HOST = "HOST"
+    self.BASE_HOST = "BASE_HOST"
     self.PATH = "PATH"
     self.STACK = "STACK"
     self.NO_HOST = "NO_HOSTNAME"
@@ -41,8 +42,28 @@ class Config():
   def make_name(self, base):
     return "{0}_{1}".format(self.get(self.PREFIX), base)
 
-  def new_app_name(self, env):
-    varname = self.make_name(self.APP_NAME)
-    appname = env.get(varname)
+  def set_new_host_name(self, env):
+    app_var_name, app_name = self._app_name(env)
+    host_var_name, host_name = self._host_name(env)
+    self._set_base_host_name(env, host_name)
+    self._set_host_name(env, host_name)
+  
+  def _set_host_name(self, env, host_name):
+    host_var_name, _ = self._host_name(env)
     commit_hash = env.get("WERCKER_GIT_COMMIT")
-    return "{0}-zdd-{1}".format(appname, commit_hash)
+    env[host_var_name] = "{0}-zdd-{1}".format(host_name, commit_hash)
+
+  def _set_base_host_name(self, env, host_name):
+    env[self.make_name(self.BASE_HOST)] = host_name
+
+  def _app_name(self, env):
+    app_var_name = self.make_name(self.APP_NAME)
+    app_name = env.get(app_var_name)
+    return (app_var_name, app_name)
+
+  def _host_name(self, env):
+    _, app_name = self._app_name(env)
+    host_var_name = self.make_name(self.HOST)
+    host_name = env.get(host_var_name, app_name)
+    return (host_var_name, host_name)
+    
