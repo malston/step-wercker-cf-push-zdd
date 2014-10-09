@@ -1,10 +1,12 @@
+from config import Config
+
 def required_field_check(**kwargs):
+  cfg = Config()
   err = False
   msg = ""
-  pfx = kwargs.get("variable_prefix")
 
   for fieldname in kwargs.get("required_fields"):
-    fieldname = "{0}_{1}".format(pfx, fieldname)
+    fieldname = cfg.make_name(fieldname)
 
     if not fieldname in kwargs.get("env_variables"):
       err = True

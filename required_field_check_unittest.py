@@ -9,10 +9,10 @@ PREFIX=cfg.get(cfg.PREFIX)
 @Vows.batch
 class ModuleTestsForRequiredFieldCheck(Vows.Context):
   def topic(self):
-    return [
-      "USE_MANIFEST",
-      "SPACE",
-    ]
+    rval = []
+    rval.append(cfg.MANIFEST)
+    rval.append(cfg.SPACE)
+    return rval
 
   class WhenExecutingWithNoRequiredFields(Vows.Context):    
     def topic(self, required_fields):
@@ -29,7 +29,7 @@ class ModuleTestsForRequiredFieldCheck(Vows.Context):
   class WhenExecutingWithSomeRequiredFields(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      ENV_VARIABLES[PREFIX+"_USE_MANIFEST"] = "true"
+      ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
       return required_field_check( required_fields=required_fields, 
                                    env_variables=ENV_VARIABLES,
                                    variable_prefix=PREFIX
@@ -41,8 +41,8 @@ class ModuleTestsForRequiredFieldCheck(Vows.Context):
   class WhenExecutingWithAllRequiredFields(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      ENV_VARIABLES[PREFIX+"_USE_MANIFEST"] = "true"
-      ENV_VARIABLES[PREFIX+"_SPACE"] = "some-space"
+      ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
+      ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
       return required_field_check( required_fields=required_fields, 
                                    env_variables=ENV_VARIABLES,
                                    variable_prefix=PREFIX

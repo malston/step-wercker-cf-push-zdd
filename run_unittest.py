@@ -10,8 +10,8 @@ PREFIX = cfg.get(cfg.PREFIX)
 class ModuleTestsForRun(Vows.Context):
   def topic(self):
     rval = []
-    rval.append("USE_MANIFEST")
-    rval.append("SPACE")
+    rval.append(cfg.MANIFEST)
+    rval.append(cfg.SPACE)
     return rval
 
   class WhenExecutingYieldsError(Vows.Context):    
@@ -28,9 +28,9 @@ class ModuleTestsForRun(Vows.Context):
   class WhenExecutingYieldsSuccess(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      ENV_VARIABLES[cfg.make_name("USE_MANIFEST")] = "true"
-      ENV_VARIABLES[cfg.make_name("SPACE")] = "some-space"
-      ENV_VARIABLES[cfg.make_name("APP_NAME")] = "my_test_app"
+      ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
+      ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
+      ENV_VARIABLES[cfg.make_name(cfg.APP_NAME)] = "my_test_app"
       ENV_VARIABLES["WERCKER_GIT_COMMIT"] = "ef306b2479a7ecd433 7875b4d954a4c8fc18 e237"
       return run( required_fields=required_fields, 
                   env_variables=ENV_VARIABLES, 
