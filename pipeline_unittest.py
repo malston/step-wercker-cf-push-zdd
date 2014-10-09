@@ -1,6 +1,7 @@
 from pyvows import Vows, expect
 from pipeline import execute
 from config import Config
+from make_push_string import make_push_string
 
 cfg = Config()
 PREFIX = cfg.get(cfg.PREFIX)
@@ -8,11 +9,11 @@ SUCCESS_CONTROL_MSG = "success_message"
 FAILURE_CONTROL_MSG = "failure_message"
 
 def mock_system_call_success(cmd_string):
-  print("Running cmd: {0}".format(cmd_string))
+  print("Mock running cmd: {0}".format(cmd_string))
   return (SUCCESS_CONTROL_MSG, False)
 
 def mock_system_call_failure(cmd_string):
-  print("Running cmd: {0}".format(cmd_string))
+  print("Mock running cmd: {0}".format(cmd_string))
   return (FAILURE_CONTROL_MSG, True)
 
 def get_di(env_vars, pfx, sys_call):
@@ -20,6 +21,7 @@ def get_di(env_vars, pfx, sys_call):
   rfc_di[cfg.ENV_VARIABLES] = env_vars
   rfc_di[cfg.VARIABLE_PREFIX] = pfx
   rfc_di[cfg.SYS_CALL] = sys_call
+  rfc_di[cfg.PIPELINE] = [make_push_string]
   rfc_di[cfg.CF_CMD] = "./cf"
   return rfc_di
 

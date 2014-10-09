@@ -2,12 +2,22 @@ from make_push_string import make_push_string
 from config import Config
 
 def execute(**kwargs):
-  msg = ""
+  msg = "No Pipeline steps configured"
+  err = True
   cfg = Config()
-  push_string, err = make_push_string(**kwargs)
-  
-  if not err:
-    sys_call = kwargs.get(cfg.SYS_CALL)
-    msg, err = sys_call(push_string)
+  sys_call = kwargs.get(cfg.SYS_CALL)
+  pipeline = kwargs.get(cfg.PIPELINE, [])
+
+  for step in pipeline:
+    msg, err = step(**kwargs)
+    
+    if err:
+      break
+
+    else:
+      msg, err = sys_call(msg)
+
+      if err:
+        break
 
   return (msg, err)

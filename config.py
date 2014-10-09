@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 class Config():
   def __init__(self):
@@ -27,6 +28,7 @@ class Config():
     self.ENV_VARIABLES = "env_variables"
     self.VARIABLE_PREFIX = "variables_prefix"
     self.SYS_CALL = "system_call"
+    self.PIPELINE = "pipeline"
     self.CF_CMD = "cf_cmd"
     self.CONST = {}
     self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_CLOUDFOUNDRY"
@@ -70,7 +72,7 @@ class Config():
     host_name = env.get(host_var_name, app_name)
     return (host_var_name, host_name)
    
-  def system_call(cmdString):
+  def system_call(self, cmdString):
     stdout = ""
     err = False
 
@@ -82,3 +84,16 @@ class Config():
       err = True
 
     return (stdout, err)
+
+  def main_dependencies(self, pipeline):
+    PREFIX = self.get(self.PREFIX)
+    REQUIRED_FIELDS = self.get(self.REQUIRED)
+    rfc_di = {}
+    rfc_di[self.REQUIRED_FIELDS] = REQUIRED_FIELDS
+    rfc_di[self.ENV_VARIABLES] = os.environ
+    rfc_di[self.VARIABLE_PREFIX] = PREFIX
+    rfc_di[self.SYS_CALL] = self.system_call
+    rfc_di[self.PIPELINE] = pipeline
+    rfc_di[self.CF_CMD] = "echo"
+    return rfc_di
+
