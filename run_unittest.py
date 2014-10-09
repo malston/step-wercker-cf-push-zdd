@@ -5,13 +5,19 @@ from config import Config
 
 cfg = Config()
 PREFIX = cfg.get(cfg.PREFIX)
+
 def get_di(required_fields, env_vars, pfx):
   rfc_di = {}
   rfc_di[cfg.REQUIRED_FIELDS] = required_fields
   rfc_di[cfg.ENV_VARIABLES] = env_vars
   rfc_di[cfg.VARIABLE_PREFIX] = pfx
+  rfc_di[cfg.SYS_CALL] = mock_system_call
   rfc_di[cfg.CF_CMD] = "./cf"
   return rfc_di
+
+def mock_system_call(cmd_string):
+  print("Running cmd: {0}".format(cmd_string))
+  return (cmd_string, False)
 
 @Vows.batch
 class ModuleTestsForRun(Vows.Context):
@@ -37,7 +43,7 @@ class ModuleTestsForRun(Vows.Context):
       ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
       ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
       ENV_VARIABLES[cfg.make_name(cfg.APP_NAME)] = "my_test_app"
-      ENV_VARIABLES["WERCKER_GIT_COMMIT"] = "ef306b2479a7ecd433 7875b4d954a4c8fc18 e237"
+      ENV_VARIABLES["WERCKER_GIT_COMMIT"] = "run_unittest_commit_hash"
       run_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
       return run( **run_di )
 

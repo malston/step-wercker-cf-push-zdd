@@ -1,3 +1,5 @@
+import subprocess
+
 class Config():
   def __init__(self):
     self.MANIFEST = "USE_MANIFEST"
@@ -24,6 +26,7 @@ class Config():
     self.REQUIRED_FIELDS = "required_fields"
     self.ENV_VARIABLES = "env_variables"
     self.VARIABLE_PREFIX = "variables_prefix"
+    self.SYS_CALL = "system_call"
     self.CF_CMD = "cf_cmd"
     self.CONST = {}
     self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_CLOUDFOUNDRY"
@@ -66,4 +69,16 @@ class Config():
     host_var_name = self.make_name(self.HOST)
     host_name = env.get(host_var_name, app_name)
     return (host_var_name, host_name)
-    
+   
+  def system_call(cmdString):
+    stdout = ""
+    err = False
+
+    try:
+      stdout = subprocess.check_output(cmdString, shell=True)
+      
+    except subprocess.CalledProcessError as e:
+      stdout = "error: {0}".format(e)
+      err = True
+
+    return (stdout, err)
