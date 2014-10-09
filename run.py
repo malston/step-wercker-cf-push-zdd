@@ -7,9 +7,8 @@ def run(**kwargs):
   msg, err = required_field_check(**kwargs)
 
   if err == False:
-    msg += "all required variables exist"
     push_string, err = make_push_string(**kwargs)
-    msg += push_string
+    msg = push_string
 
   return (msg, err)
 
@@ -21,6 +20,7 @@ if __name__ == '__main__':
                   env_variables=os.environ,
                   variable_prefix=PREFIX,
                   cf_cmd="./cf" )
+
   exit_code = 0
 
   if err:
