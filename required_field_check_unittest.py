@@ -6,6 +6,14 @@ from config import Config
 cfg = Config()
 PREFIX=cfg.get(cfg.PREFIX)
 
+def get_di(required_fields, env_vars, pfx):
+  rfc_di = {}
+  rfc_di[cfg.REQUIRED_FIELDS] = required_fields
+  rfc_di[cfg.ENV_VARIABLES] = env_vars
+  rfc_di[cfg.VARIABLE_PREFIX] = pfx
+  rfc_di[cfg.CF_CMD] = "./cf"
+  return rfc_di
+
 @Vows.batch
 class ModuleTestsForRequiredFieldCheck(Vows.Context):
   def topic(self):
@@ -17,10 +25,8 @@ class ModuleTestsForRequiredFieldCheck(Vows.Context):
   class WhenExecutingWithNoRequiredFields(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      return required_field_check( required_fields=required_fields, 
-                                   env_variables=ENV_VARIABLES,
-                                   variable_prefix=PREFIX
-                                  )
+      rfc_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
+      return required_field_check( **rfc_di )
 
     def we_get_a_True_error_value(self, topic):
       msg, err = topic
@@ -30,10 +36,9 @@ class ModuleTestsForRequiredFieldCheck(Vows.Context):
     def topic(self, required_fields):
       ENV_VARIABLES = {}
       ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
-      return required_field_check( required_fields=required_fields, 
-                                   env_variables=ENV_VARIABLES,
-                                   variable_prefix=PREFIX
-                                  )
+      rfc_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
+      return required_field_check( **rfc_di )
+
     def we_get_a_True_error_value(self, topic):
       msg, err = topic
       expect(err).to_equal(True)
@@ -43,10 +48,8 @@ class ModuleTestsForRequiredFieldCheck(Vows.Context):
       ENV_VARIABLES = {}
       ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
       ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
-      return required_field_check( required_fields=required_fields, 
-                                   env_variables=ENV_VARIABLES,
-                                   variable_prefix=PREFIX
-                                  )
+      rfc_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
+      return required_field_check( **rfc_di )
 
     def we_get_a_False_error_value(self, topic):
       msg, err = topic

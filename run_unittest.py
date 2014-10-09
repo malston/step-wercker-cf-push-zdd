@@ -5,6 +5,13 @@ from config import Config
 
 cfg = Config()
 PREFIX = cfg.get(cfg.PREFIX)
+def get_di(required_fields, env_vars, pfx):
+  rfc_di = {}
+  rfc_di[cfg.REQUIRED_FIELDS] = required_fields
+  rfc_di[cfg.ENV_VARIABLES] = env_vars
+  rfc_di[cfg.VARIABLE_PREFIX] = pfx
+  rfc_di[cfg.CF_CMD] = "./cf"
+  return rfc_di
 
 @Vows.batch
 class ModuleTestsForRun(Vows.Context):
@@ -17,9 +24,8 @@ class ModuleTestsForRun(Vows.Context):
   class WhenExecutingYieldsError(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      return run( required_fields=required_fields, 
-                  env_variables=ENV_VARIABLES, 
-                  variable_prefix=PREFIX )
+      run_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
+      return run( **run_di )
 
     def we_get_a_True_error_value(self, topic):
       msg, err = topic
@@ -32,10 +38,8 @@ class ModuleTestsForRun(Vows.Context):
       ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
       ENV_VARIABLES[cfg.make_name(cfg.APP_NAME)] = "my_test_app"
       ENV_VARIABLES["WERCKER_GIT_COMMIT"] = "ef306b2479a7ecd433 7875b4d954a4c8fc18 e237"
-      return run( required_fields=required_fields, 
-                  env_variables=ENV_VARIABLES, 
-                  variable_prefix=PREFIX,
-                  cf_cmd="./cf" )
+      run_di = get_di(required_fields, ENV_VARIABLES, PREFIX)
+      return run( **run_di )
 
     def we_get_a_False_error_value(self, topic):
       msg, err = topic

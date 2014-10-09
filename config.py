@@ -18,8 +18,12 @@ class Config():
     self.USER_NAME = "USER_NAME"
     self.APP_NAME = "APP_NAME"
     self.API_URL = "API_URL"
-    self.PREFIX="prefix"
-    self.REQUIRED="required"
+    self.PREFIX = "prefix"
+    self.REQUIRED = "required"
+    self.REQUIRED_FIELDS = "required_fields"
+    self.ENV_VARIABLES = "env_variables"
+    self.VARIABLE_PREFIX = "variables_prefix"
+    self.CF_CMD = "cf_cmd"
     self.CONST = {}
     self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_CLOUDFOUNDRY"
     self.CONST[self.REQUIRED] = []
