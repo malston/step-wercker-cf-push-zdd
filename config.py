@@ -1,8 +1,11 @@
 import subprocess
 import os
+import string
+import random
 
 class Config():
   def __init__(self):
+    self.COMMIT_HASH = "WERCKER_GIT_COMMIT"
     self.MANIFEST = "USE_MANIFEST"
     self.BUILDPACK = "BUILDPACK"
     self.COMMAND = "COMMAND"
@@ -30,6 +33,7 @@ class Config():
     self.SYS_CALL = "system_call"
     self.PIPELINE = "pipeline"
     self.CF_CMD = "cf_cmd"
+    self.RANDOM_ROUTE = "--random-route"
     self.CONST = {}
     self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_CLOUDFOUNDRY"
     self.CONST[self.REQUIRED] = []
@@ -47,31 +51,22 @@ class Config():
   def make_name(self, base):
     return "{0}_{1}".format(self.get(self.PREFIX), base)
 
-  def set_new_host_name(self, env):
-    app_var_name, app_name = self._app_name(env)
-    host_var_name, host_name = self._host_name(env)
-    self._set_base_host_name(env, host_name)
-    self._set_host_name(env, host_name)
-  
-  def _set_host_name(self, env, host_name):
-    host_var_name, _ = self._host_name(env)
-    commit_hash = env.get("WERCKER_GIT_COMMIT")
-    env[host_var_name] = "{0}-zdd-{1}".format(host_name, commit_hash)
-
-  def _set_base_host_name(self, env, host_name):
-    env[self.make_name(self.BASE_HOST)] = host_name
-
-  def _app_name(self, env):
+  def set_app_name(self, env):
     app_var_name = self.make_name(self.APP_NAME)
     app_name = env.get(app_var_name)
-    return (app_var_name, app_name)
+    random_hash = env.get(self.COMMIT_HASH, self._id_generator())
+    app_name = "{0}_{1}".format(app_name, random_hash)
+    env[app_var_name] = app_name
 
-  def _host_name(self, env):
-    _, app_name = self._app_name(env)
+  def set_host_name(self, env):
     host_var_name = self.make_name(self.HOST)
-    host_name = env.get(host_var_name, app_name)
+    host_name = env.get(host_var_name, "")
+    env[host_var_name] = host_name
     return (host_var_name, host_name)
    
+  def _id_generator(self, size=16, chars=string.ascii_uppercase + string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
   def system_call(self, cmdString):
     stdout = ""
     err = False

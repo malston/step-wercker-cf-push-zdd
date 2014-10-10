@@ -8,7 +8,7 @@ FIELD_FLAG_ACTIONS[cfg.make_name(cfg.COMMAND)] =        lambda v: ("-c %s" % v) 
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.DOMAIN)] =         lambda v: ("-d %s" % v) if v != "" else ""
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.INSTANCES)] =      lambda v: ("-i %s" % v) if v != "" else ""
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.MEMORY)] =         lambda v: ("-m %s" % v) if v != "" else ""
-FIELD_FLAG_ACTIONS[cfg.make_name(cfg.HOST)] =           lambda v: ("-n %s" % v) if v != "" else ""
+FIELD_FLAG_ACTIONS[cfg.make_name(cfg.HOST)] =           lambda v: ("-n %s" % v) if v != "" else cfg.RANDOM_ROUTE
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.PATH)] =           lambda v: ("-p %s" % v) if v != "" else ""
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.STACK)] =          lambda v: ("-s %s" % v) if v != "" else ""
 FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_HOST)] =        lambda v: "--no-hostname" if v != "" and v == True else ""
@@ -25,11 +25,13 @@ def clean_append(current, extend):
 
 def make_push_string(**kwargs):
   env = kwargs.get(cfg.ENV_VARIABLES)
+  cfg.set_host_name(env)
+  cfg.set_app_name(env)
   err = False
+  cf_coommand_string = kwargs.get(cfg.CF_CMD)
   cf_action = "push"
-  push_string = clean_append(kwargs.get(cfg.CF_CMD), cf_action)
   app_name = env.get(cfg.make_name(cfg.APP_NAME))
-  cfg.set_new_host_name(env)
+  push_string = clean_append(cf_coommand_string, cf_action)
   push_string = clean_append(push_string, app_name)
 
   for flag_name, flag_lambda in FIELD_FLAG_ACTIONS.iteritems():
