@@ -10,17 +10,17 @@ PREFIX = cfg.get(cfg.PREFIX)
 class ModuleTestsForRequiredFieldCheck(Vows.Context):
   def topic(self):
     rval = []
-    rval.append(cfg.make_name("USE_MANIFEST"))
-    rval.append(cfg.make_name("SPACE"))
+    rval.append(cfg.make_name(cfg.MANIFEST))
+    rval.append(cfg.make_name(cfg.SPACE))
     return rval
 
   class WhenExecutingWithNoRequiredFields(Vows.Context):    
     def topic(self, required_fields):
       ENV_VARIABLES = {}
-      ENV_VARIABLES[cfg.make_name("USE_MANIFEST")] = "true"
-      ENV_VARIABLES[cfg.make_name("APP_NAME")] = "my_test_app"
-      ENV_VARIABLES["WERCKER_GIT_COMMIT"] = "ef306b2479a7ecd433 7875b4d954a4c8fc18 e237"
-      ENV_VARIABLES[cfg.make_name("SPACE")] = "some-space"
+      ENV_VARIABLES[cfg.make_name(cfg.MANIFEST)] = "true"
+      ENV_VARIABLES[cfg.make_name(cfg.APP_NAME)] = "my_test_app"
+      ENV_VARIABLES[cfg.COMMIT_HASH] = "ef306b2479a7ecd433 7875b4d954a4c8fc18 e237"
+      ENV_VARIABLES[cfg.make_name(cfg.SPACE)] = "some-space"
       return make_push_string(required_fields=required_fields, 
                               env_variables=ENV_VARIABLES,
                               variable_prefix=PREFIX)
