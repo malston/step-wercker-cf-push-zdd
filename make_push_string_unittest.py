@@ -1,5 +1,5 @@
 from pyvows import Vows, expect
-from make_push_string import make_push_string, FIELD_FLAG_ACTIONS
+from make_push_string import make_push_string
 import os
 from config import Config
 

@@ -1,6 +1,6 @@
 from pipeline import execute
 from config import Config
-from make_push_string import make_push_string
+from make_push_string import PushStringFactory
 from required_field_check import required_field_check
 
 def run(**kwargs):
@@ -9,7 +9,7 @@ def run(**kwargs):
 if __name__ == '__main__':
   pipeline = [
     required_field_check,
-    make_push_string
+    PushStringFactory().run
   ]
   cfg = Config()
   dependencies = cfg.main_dependencies(pipeline)
