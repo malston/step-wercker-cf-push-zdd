@@ -4,6 +4,8 @@ import string
 import random
 
 class Config():
+  RANDOM_HASH = None
+
   def __init__(self):
     self.COMMIT_HASH = "WERCKER_GIT_COMMIT"
     self.MANIFEST = "USE_MANIFEST"
@@ -51,21 +53,42 @@ class Config():
   def make_name(self, base):
     return "{0}_{1}".format(self.get(self.PREFIX), base)
 
-  def set_app_name(self, env):
+  def get_app_name(self, env):
     app_var_name = self.make_name(self.APP_NAME)
     app_name = env.get(app_var_name)
-    random_hash = env.get(self.COMMIT_HASH, self._id_generator())
-    app_name = "{0}_{1}".format(app_name, random_hash)
-    env[app_var_name] = app_name
+    random_hash = self._get_hash(env)
+    new_app_name = "{0}_{1}".format(app_name, random_hash)
+    return (app_var_name, new_app_name, app_name)
 
-  def set_host_name(self, env):
+  def set_app_name(self, env):
+    app_var_name, new_app_name, _ = self.get_app_name(env)
+    env[app_var_name] = new_app_name
+
+  def get_host_name(self, env):
     host_var_name = self.make_name(self.HOST)
     host_name = env.get(host_var_name, "")
-    env[host_var_name] = host_name
     return (host_var_name, host_name)
+    
+  def set_host_name(self, env):
+    host_var_name, host_name = self.get_host_name(env)
+    env[host_var_name] = host_name
    
+  def _get_hash(self, env):
+
+    if not self.COMMIT_HASH in env:
+      env[self.COMMIT_HASH] = self._id_generator()
+    
+    return env.get(self.COMMIT_HASH)
+
+
   def _id_generator(self, size=16, chars=string.ascii_uppercase + string.digits):
-    return ''.join(random.choice(chars) for _ in range(size))
+    random_hash = self.RANDOM_HASH
+
+    if random_hash == None:
+      random_hash = ''.join(random.choice(chars) for _ in range(size))
+      self.RANDOM_HASH = random_hash
+
+    return random_hash
 
   def system_call(self, cmdString):
     stdout = ""
@@ -89,6 +112,6 @@ class Config():
     rfc_di[self.VARIABLE_PREFIX] = PREFIX
     rfc_di[self.SYS_CALL] = self.system_call
     rfc_di[self.PIPELINE] = pipeline
-    rfc_di[self.CF_CMD] = "echo"
+    rfc_di[self.CF_CMD] = "echo ./cf"
     return rfc_di
 

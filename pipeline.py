@@ -1,5 +1,6 @@
 from make_push_string import make_push_string
 from config import Config
+import copy
 
 def execute(**kwargs):
   msg = "No Pipeline steps configured"
@@ -9,7 +10,7 @@ def execute(**kwargs):
   pipeline = kwargs.get(cfg.PIPELINE, [])
 
   for step in pipeline:
-    msg, err = step(**kwargs)
+    msg, err = step(**copy.deepcopy(kwargs))
     
     if err:
       break
@@ -19,5 +20,5 @@ def execute(**kwargs):
 
       if err:
         break
-
+    
   return (msg, err)
