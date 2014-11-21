@@ -3,22 +3,28 @@ from config import Config
 import copy
 
 def execute(**kwargs):
-  msg = "No Pipeline steps configured"
+  msgList = []
+  response_msg = "No Pipeline steps configured"
   err = True
   cfg = Config()
   sys_call = kwargs.get(cfg.SYS_CALL)
   pipeline = kwargs.get(cfg.PIPELINE, [])
 
   for step in pipeline:
-    msg, err = step(**copy.deepcopy(kwargs))
+    cmd, err = step(**copy.deepcopy(kwargs))
     
     if err:
       break
 
     else:
-      msg, err = sys_call(msg)
+      msg, err = sys_call(cmd)
 
       if err:
         break
+ 
+    msgList.append((cmd, msg))
     
-  return (msg, err)
+  if len(msgList) == 0:
+    msgList.append(response_msg)
+
+  return (msgList, err)

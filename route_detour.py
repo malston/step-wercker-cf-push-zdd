@@ -40,7 +40,7 @@ class RouteDetourStringFactory(PipelineStepInterface):
   def smart_route(self):
     route = self.host_name()
     
-    if self.host_name() == "":
+    if route == "":
       route = self.app_name()  
 
     return route

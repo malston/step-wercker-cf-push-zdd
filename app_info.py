@@ -22,3 +22,15 @@ class AppInfo():
     # match entity.name
     return []
 
+  def _command_create(self, url):
+    return "cf curl {0} -X 'GET'".format(url)
+ 
+  def _get_entity(self, url, response_parser):
+    cmd = self._command_create(url)
+    stdout, err = self.sys_call(cmd)
+
+    if not err:
+      response = response_parser(stdout)
+
+    return response
+
