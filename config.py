@@ -46,6 +46,8 @@ class Config():
     self.CONST[self.REQUIRED].append(self.USER_NAME)
     self.CONST[self.REQUIRED].append(self.APP_NAME)
     self.CONST[self.REQUIRED].append(self.API_URL)
+    self.CONST[self.REQUIRED].append(self.DOMAIN)
+    self.CONST[self.REQUIRED].append(self.HOST)
   
   def get(self, key):
     return self.CONST.get(key)
