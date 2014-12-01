@@ -72,6 +72,11 @@ class Config():
   def set_host_name(self, env):
     host_var_name, host_name = self.get_host_name(env)
     env[host_var_name] = host_name
+  
+  def get_domain_name(self, env):
+    domain_var_name = self.make_name(self.DOMAIN)
+    domain_name = env.get(domain_var_name, "")
+    return domain_name
    
   def _get_hash(self, env):
 
@@ -95,6 +100,7 @@ class Config():
     err = False
 
     try:
+      print(cmdString)
       stdout = subprocess.check_output(cmdString, shell=True)
       
     except subprocess.CalledProcessError as e:
@@ -112,6 +118,6 @@ class Config():
     rfc_di[self.VARIABLE_PREFIX] = PREFIX
     rfc_di[self.SYS_CALL] = self.system_call
     rfc_di[self.PIPELINE] = pipeline
-    rfc_di[self.CF_CMD] = "echo ./cf"
+    rfc_di[self.CF_CMD] = "cf"
     return rfc_di
 

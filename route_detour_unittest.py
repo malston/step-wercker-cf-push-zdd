@@ -33,7 +33,7 @@ class ModuleTestsForRouteDetourStringFactory(Vows.Context):
 
       def we_should_see_route_in_command_string(self, topic):
         push_string, err = topic
-        route_name = self.ROUTE_DETOUR_CONTROL.domain_name()
+        route_name = self.ROUTE_DETOUR_CONTROL.host_name()
         expect( (route_name in push_string) ).to_equal(True)
 
       def we_should_see_appname_in_command_string(self, topic):

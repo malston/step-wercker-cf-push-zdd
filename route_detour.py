@@ -1,5 +1,6 @@
 from config import Config
 from pipeline_step_base import PipelineStepInterface
+from app_info import AppInfo
 
 class RouteDetourStringFactory(PipelineStepInterface):
   ROUTE_FROM_HOST = 1
@@ -10,7 +11,7 @@ class RouteDetourStringFactory(PipelineStepInterface):
 
   def __init__(self, **setup):
     self.cf_action = setup.get("action")
-    self.domain_name = self.route_from(setup.get("route_definition"))
+    self.host = self.route_from(setup.get("route_definition"))
     self.cfg = Config()
     self.env = {}
     self.sys_call = {}
@@ -30,8 +31,8 @@ class RouteDetourStringFactory(PipelineStepInterface):
     return functor
 
   def host_name(self):
-    _, host_name = self.cfg.get_host_name(self.env)
-    return host_name
+    _, hostname = self.cfg.get_host_name(self.env)
+    return hostname
 
   def app_name(self):
     _, _, app_name = self.cfg.get_app_name(self.env)
@@ -45,23 +46,41 @@ class RouteDetourStringFactory(PipelineStepInterface):
 
     return route
 
-  def _get_routing_table_for(self, route):
-    # cf curl /v2/organizations -X 'GET'
-    # match entity.name
-    # entity.spaces_url
-    # cf curl <spaces_url> -X 'GET'
-    # match entity.name
-    # entity.routes_url
-    # match entity.host
-    # entity.apps_url
-    # match entity.name
-    return []
+  def _string_formatter(self, cmd, action, name, domain, hostname):
+    return "{0} {1} {2} {3} -n {4}; ".format(cmd, action, name, domain, hostname)
+
+  def _unmap_route_stringgen(self, **kwargs):
+    self.env = kwargs.get(self.cfg.ENV_VARIABLES)
+    domain_name = self.cfg.get_domain_name(self.env)
+    app_info = AppInfo( **kwargs )
+    cmd = kwargs.get(self.cfg.CF_CMD)
+    command_string = ""
+
+    try:
+      app_detail_list, _ = app_info.get_existing_app_details()
+
+      for app in app_detail_list:
+        command_string += self._string_formatter(cmd, self.cf_action, app["name"], domain_name, self.host())
+
+    except:  
+      command_string = "{0} routes".format(cmd)
+       
+    return command_string
 
   def generate_routing_string(self, **kwargs):
     self.env = kwargs.get(self.cfg.ENV_VARIABLES)
+    domain_name = self.cfg.get_domain_name(self.env)
     cmd = kwargs.get(self.cfg.CF_CMD)
-    _, app_name, _ = self.cfg.get_app_name(self.env)
-    return "{0} {1} {2} {3}".format(cmd, self.cf_action, app_name, self.domain_name())
+    command_string = ""
+    
+    if self.cf_action == self.ROUTE_UNMAP:
+      command_string = self._unmap_route_stringgen(**kwargs)
+      
+    else:
+      _, app_name, _ = self.cfg.get_app_name(self.env)
+      command_string = self._string_formatter(cmd, self.cf_action, app_name, domain_name, self.host())
+
+    return command_string
 
   def run(self, **kwargs):
     err = False

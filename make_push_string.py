@@ -10,12 +10,12 @@ class PushStringFactory(PipelineStepInterface):
   FIELD_FLAG_ACTIONS[cfg.make_name(cfg.DOMAIN)] =         lambda v: ("-d %s" % v) if v != "" else ""
   FIELD_FLAG_ACTIONS[cfg.make_name(cfg.INSTANCES)] =      lambda v: ("-i %s" % v) if v != "" else ""
   FIELD_FLAG_ACTIONS[cfg.make_name(cfg.MEMORY)] =         lambda v: ("-m %s" % v) if v != "" else ""
-  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.HOST)] =           lambda v: ("-n %s" % v) if v != "" else PushStringFactory.cfg.RANDOM_ROUTE
+  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.HOST)] =           lambda v: PushStringFactory.cfg.RANDOM_ROUTE
   FIELD_FLAG_ACTIONS[cfg.make_name(cfg.PATH)] =           lambda v: ("-p %s" % v) if v != "" else ""
   FIELD_FLAG_ACTIONS[cfg.make_name(cfg.STACK)] =          lambda v: ("-s %s" % v) if v != "" else ""
-  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_HOST)] =        lambda v: "--no-hostname" if v != "" and v == True else ""
-  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_ROUTE)] =       lambda v: "--no-route" if v != "" and v == True else ""
-  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_START)] =       lambda v: "--no-start" if v != "" and v == True else ""
+  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_HOST)] =        lambda v: "--no-hostname" if v.lower() == 'true' else ""
+  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_ROUTE)] =       lambda v: "--no-route" if v.lower() == 'true' else ""
+  FIELD_FLAG_ACTIONS[cfg.make_name(cfg.NO_START)] =       lambda v: "--no-start" if v.lower() == 'true' else ""
 
   def __init__(self):
     self.env = {}
