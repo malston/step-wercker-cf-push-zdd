@@ -37,7 +37,7 @@ class Config():
     self.CF_CMD = "cf_cmd"
     self.RANDOM_ROUTE = "--random-route"
     self.CONST = {}
-    self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_CLOUDFOUNDRY"
+    self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_ZDD"
     self.CONST[self.REQUIRED] = []
     self.CONST[self.REQUIRED].append(self.MANIFEST)
     self.CONST[self.REQUIRED].append(self.SPACE)
@@ -120,6 +120,6 @@ class Config():
     rfc_di[self.VARIABLE_PREFIX] = PREFIX
     rfc_di[self.SYS_CALL] = self.system_call
     rfc_di[self.PIPELINE] = pipeline
-    rfc_di[self.CF_CMD] = "cf"
+    rfc_di[self.CF_CMD] = os.getenv("CF_CLI", "cf")
     return rfc_di
 

@@ -10,13 +10,15 @@ SAMPLE USAGE:
 deploy:
   steps:
     - xchapter7x/cf-push-zdd:
-        cloudfoundry_user_name: $cfuser
-        cloudfoundry_user_pass: $cfpass
-        cloudfoundry_org: $cforg
-        cloudfoundry_space: $cfspace
-        cloudfoundry_api_url: $cfurl
-        cloudfoundry_app_name: $cfappname
-        cloudfoundry_use_manifest: true
+        user_name: $cfuser
+        user_pass: $cfpass
+        org: $cforg
+        space: $cfspace
+        api_url: $cfurl
+        app_name: $cfappname
+        use_manifest: true
+        host:$hostname
+        domain:$domainname
 ```
 
 
@@ -46,6 +48,14 @@ properties:
   cloudfoundry_use_manifest:
     type: boolean
     required: true
+  cloudfoundry_domain:
+    type: string
+    required: true
+    default: ""
+  cloudfoundry_host:
+    type: string
+    required: true
+    default: ""
   cloudfoundry_buildpack:
     type: string
     required: false
@@ -54,19 +64,11 @@ properties:
     type: string
     required: false
     default: ""
-  cloudfoundry_domain:
-    type: string
-    required: false
-    default: ""
   cloudfoundry_num_instances:
     type: string
     required: false
     default: ""
   cloudfoundry_memory:
-    type: string
-    required: false
-    default: ""
-  cloudfoundry_host:
     type: string
     required: false
     default: ""
