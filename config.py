@@ -102,7 +102,6 @@ class Config():
     err = False
 
     try:
-      print(cmdString)
       stdout = subprocess.check_output(cmdString, shell=True)
       
     except subprocess.CalledProcessError as e:

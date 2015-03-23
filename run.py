@@ -17,7 +17,7 @@ if __name__ == '__main__':
                               route_definition=RouteDetourStringFactory.ROUTE_SMART_NAME ).run,
     RouteDetourStringFactory( action=RouteDetourStringFactory.ROUTE_UNMAP, 
                               route_definition=RouteDetourStringFactory.ROUTE_SMART_NAME ).run
-  ]
+  ]    
   cfg = Config()
   dependencies = cfg.main_dependencies(pipeline)
   msg, err = run( **dependencies )
