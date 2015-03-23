@@ -15,8 +15,9 @@ class LoginStringFactory(PipelineStepInterface):
     space = self._get_helper(self.cfg.SPACE)
     usr_pass = self._get_helper(self.cfg.USER_PASS)
     usr_name = self._get_helper(self.cfg.USER_NAME)
+    api_url = self._get_helper(self.cfg.API_URL)
     cmd = kwargs.get(self.cfg.CF_CMD)
-    return "{0} login -u {1} -p {2} -o {3} -s {4}".format(cmd, usr_name, usr_pass, org, space)
+    return "{0} api {5} && {0} login -u {1} -p {2} -o {3} -s {4}".format(cmd, usr_name, usr_pass, org, space, api_url)
 
   def run(self, **kwargs):
     err = False
