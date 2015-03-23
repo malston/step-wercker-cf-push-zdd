@@ -4,6 +4,7 @@ from make_push_string import PushStringFactory
 from login_string import LoginStringFactory
 from required_field_check import required_field_check
 from route_detour import RouteDetourStringFactory
+import os
 
 def run(**kwargs):
   return execute(**kwargs)
@@ -25,7 +26,9 @@ if __name__ == '__main__':
 
   if err:
     exit_code = 1
-  
-  print(msg)
+ 
+  if os.environ['DEBUG_STEP'] == 'true':
+    print(msg)
+
   exit(exit_code)
 
