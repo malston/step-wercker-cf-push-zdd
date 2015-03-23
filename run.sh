@@ -1,6 +1,6 @@
 #!/bin/sh
 
-sudo apt-get install -y python
+sudo apt-get install -y python wget
 wget http://go-cli.s3-website-us-east-1.amazonaws.com/releases/v6.3.2/cf-linux-amd64.tgz
 tar -zxvf cf-linux-amd64.tgz
 export CF_CLI=$(pwd)/cf
