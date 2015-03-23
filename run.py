@@ -27,7 +27,7 @@ if __name__ == '__main__':
   if err:
     exit_code = 1
  
-  if os.environ['DEBUG_STEP'] == 'true':
+  if "DEBUG_STEP" in os.environ and os.environ["DEBUG_STEP"] == 'true':
     print(msg)
 
   exit(exit_code)
