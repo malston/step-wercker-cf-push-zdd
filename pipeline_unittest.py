@@ -8,10 +8,10 @@ PREFIX = cfg.get(cfg.PREFIX)
 SUCCESS_CONTROL_MSG = "success_message"
 SUCCESS_PREPEND = "my_test_app"
 SUCCESS_NAME = "pipeline_unittest_commit_hash_success"
-SUCCESS_CONTROL_CMD = "./cf push {1}_{0} --no-manifest --random-route".format(SUCCESS_NAME, SUCCESS_PREPEND)
+SUCCESS_CONTROL_CMD = "./cf push {1}_{0} --no-manifest".format(SUCCESS_NAME, SUCCESS_PREPEND)
 FAILURE_CONTROL_MSG = "failure_message"
 FAILURE_NAME = "pipeline_unittest_commit_hash_failure"
-FAILURE_CONTROL_CMD = "./cf push {0} --no-manifest --random-route".format(FAILURE_NAME)
+FAILURE_CONTROL_CMD = "./cf push {0} --no-manifest".format(FAILURE_NAME)
 
 
 def mock_system_call_success(cmd_string):
