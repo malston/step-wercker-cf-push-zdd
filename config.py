@@ -35,7 +35,7 @@ class Config():
     self.SYS_CALL = "system_call"
     self.PIPELINE = "pipeline"
     self.CF_CMD = "cf_cmd"
-    self.RANDOM_ROUTE = "--random-route"
+    self.RANDOM_ROUTE = "" #"--random-route"
     self.CONST = {}
     self.CONST[self.PREFIX] = "WERCKER_CF_PUSH_ZDD"
     self.CONST[self.REQUIRED] = []
