@@ -1,6 +1,7 @@
 from config import Config
 from pipeline_step_base import PipelineStepInterface
 from app_info import AppInfo
+from stop_app_string import StopStringFactory
 
 class RouteDetourStringFactory(PipelineStepInterface):
   ROUTE_FROM_HOST = 1
@@ -67,6 +68,26 @@ class RouteDetourStringFactory(PipelineStepInterface):
        
     return command_string
 
+  def _stop_app_string(self, **kwargs):
+    self.env = kwargs.get(self.cfg.ENV_VARIABLES)
+    domain_name = self.cfg.get_domain_name(self.env)
+    app_info = AppInfo( **kwargs )
+    cmd = kwargs.get(self.cfg.CF_CMD)
+    command_string = ""
+
+    try:
+      app_detail_list, _ = app_info.get_existing_app_details()
+
+      for app in app_detail_list:
+        stopString = StopStringFactory(app["name"])
+        cs, _ = stopString.run(**kwargs)
+        command_string += cs+";"
+
+    except:  
+      command_string = "app can not be stopped"
+
+    return command_string
+
   def generate_routing_string(self, **kwargs):
     self.env = kwargs.get(self.cfg.ENV_VARIABLES)
     domain_name = self.cfg.get_domain_name(self.env)
@@ -75,6 +96,7 @@ class RouteDetourStringFactory(PipelineStepInterface):
     
     if self.cf_action == self.ROUTE_UNMAP:
       command_string = self._unmap_route_stringgen(**kwargs)
+      command_string += self._stop_app_string(**kwargs)
       
     else:
       _, app_name, _ = self.cfg.get_app_name(self.env)

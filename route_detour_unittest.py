@@ -10,6 +10,27 @@ class ModuleTestsForRouteDetourStringFactory(Vows.Context):
   def topic(self):
     env = {}   
     return env
+  
+  class WhenExecutingRunSuccessfullyUnmap(Vows.Context):
+    def topic(self, ENV_VARIABLES):
+      return RouteDetourStringFactory(action=RouteDetourStringFactory.ROUTE_UNMAP, 
+                                      route_definition=RouteDetourStringFactory.ROUTE_FROM_HOST)
+    
+    class WhenRunningRouteDetourStringUnmap(Vows.Context):
+      ROUTE_DETOUR_CONTROL = {}
+
+      def topic(self, RouteDetour, ENV_VARIABLES):
+        self.ROUTE_DETOUR_CONTROL = RouteDetour
+        return RouteDetour.run(env_variables=ENV_VARIABLES)
+
+      def we_get_a_False_error_value(self, topic):
+        push_string, err = topic
+        expect(err).to_equal(False)
+
+      def we_should_see_route_in_command_string(self, topic):
+        push_string, err = topic
+        route_name = self.ROUTE_DETOUR_CONTROL.host_name()
+        expect( (route_name in push_string) ).to_equal(True)
 
   class WhenExecutingRunSuccessfully(Vows.Context):
     def topic(self, ENV_VARIABLES):
