@@ -35,8 +35,7 @@ then
 fi
 
 sudo apt-get install -y golang
-wget http://go-cli.s3-website-us-east-1.amazonaws.com/releases/v6.3.2/cf-linux-amd64.tgz
-tar -zxvf cf-linux-amd64.tgz
+wget http://bit.ly/1GIceDZ -O cf.tgz && tar -xvzf cf.tgz
 CF=./cf
 ${CF} api ${WERCKER_CF_PUSH_ZDD_API_URL}
 
