@@ -34,19 +34,14 @@ then
     fail 'missing or empty option use_manifest, please check wercker.yml'
 fi
 
-sudo apt-get install -y golang
-
-wget http://go-cli.s3-website-us-east-1.amazonaws.com/releases/v6.12.0/cf-linux-amd64.tgz
-tar -zxvf cf-linux-amd64.tgz
+./test.sh
 CF=./cf
+
 echo "running cf api ${WERCKER_CF_PUSH_ZDD_API_URL} command"
 ${CF} api ${WERCKER_CF_PUSH_ZDD_API_URL}
 
 echo "running ${CF} login -u ${WERCKER_CF_PUSH_ZDD_USER_NAME} -p ###### -o ${WERCKER_CF_PUSH_ZDD_ORG} -s ${WERCKER_CF_PUSH_ZDD_SPACE} command"
 ${CF} login -u ${WERCKER_CF_PUSH_ZDD_USER_NAME} -p ${WERCKER_CF_PUSH_ZDD_USER_PASS} -o ${WERCKER_CF_PUSH_ZDD_ORG} -s ${WERCKER_CF_PUSH_ZDD_SPACE}
-
-GOPATH=/tmp go get github.com/xchapter7x/autopilot
-${CF} install-plugin /tmp/autopilot
 
 PUSH_CMD=""
 PUSH_CMD="${CF} push-zdd ${WERCKER_CF_PUSH_ZDD_APP_NAME}"
