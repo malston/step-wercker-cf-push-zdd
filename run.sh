@@ -34,7 +34,7 @@ then
     fail 'missing or empty option use_manifest, please check wercker.yml'
 fi
 
-./test.sh
+./stage_env.sh
 CF=./cf
 
 echo "running cf api ${WERCKER_CF_PUSH_ZDD_API_URL} command"
