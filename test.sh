@@ -1,8 +1,8 @@
 #!/bin/sh
 
-sudo add-apt-repository ppa:gophers/go
-sudo apt-get update
-sudo apt-get install golang-stable
+sudo add-apt-repository ppa:gophers/go -y
+sudo apt-get update -y
+sudo apt-get install golang-stable -y
 
 echo ""
 echo "lets see if we can setup the environment, plugins and all"
