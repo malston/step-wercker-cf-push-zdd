@@ -35,14 +35,17 @@ then
 fi
 
 sudo apt-get install -y golang
+
 wget http://bit.ly/1GIceDZ -O cf.tgz && tar -xvzf cf.tgz
 CF=./cf
+echo "running `cf api ${WERCKER_CF_PUSH_ZDD_API_URL}` command"
 ${CF} api ${WERCKER_CF_PUSH_ZDD_API_URL}
 
+echo "running `${CF} login -u ${WERCKER_CF_PUSH_ZDD_USER_NAME} -p ###### -o ${WERCKER_CF_PUSH_ZDD_ORG} -s ${WERCKER_CF_PUSH_ZDD_SPACE}` command"
 ${CF} login -u ${WERCKER_CF_PUSH_ZDD_USER_NAME} -p ${WERCKER_CF_PUSH_ZDD_USER_PASS} -o ${WERCKER_CF_PUSH_ZDD_ORG} -s ${WERCKER_CF_PUSH_ZDD_SPACE}
 
-go get github.com/xchapter7x/autopilot
-${CF} install-plugin $GOPATH/bin/autopilot
+GOPATH=/tmp go get github.com/xchapter7x/autopilot
+${CF} install-plugin /tmp/autopilot
 
 PUSH_CMD=""
 PUSH_CMD="${CF} push-zdd ${WERCKER_CF_PUSH_ZDD_APP_NAME}"
