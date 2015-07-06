@@ -3,4 +3,8 @@ build:
   steps:
     - wercker/bundle-install@1.1.1
     - validate-wercker-step
-
+    
+    - script:
+          name: Make sure we can pull cli and add plugins
+          code: |
+            ./test.sh
