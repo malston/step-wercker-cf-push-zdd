@@ -1,5 +1,5 @@
 name: cf-push-zdd
-version: 3.0.3
+version: 3.0.4
 description: cf-push - a step to do a blue/green zero downtime deploy of an app to cloudfoundry
 keywords:
   - cloudfoundry
