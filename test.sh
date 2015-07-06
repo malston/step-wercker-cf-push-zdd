@@ -19,5 +19,5 @@ GOPATH=/tmp go get github.com/xchapter7x/autopilot
 ls -la /tmp
 
 echo "installing autopilot plugin"
-${CF} install-plugin /tmp/autopilot
+${CF} install-plugin /tmp/bin/autopilot
 
