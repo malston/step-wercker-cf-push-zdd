@@ -95,6 +95,12 @@ if [ ! -z ${WERCKER_CF_PUSH_ZDD_NO_ROUTE} ]; then
   fi
 fi
 
+if [ ! -z ${WERCKER_CF_PUSH_ZDD_RANDOM_ROUTE} ]; then
+  if [[ ${WERCKER_CF_PUSH_ZDD_RANDOM_ROUTE} == true ]]; then
+    PUSH_CMD="${PUSH_CMD} --random-route"
+  fi
+fi
+
 if [ ! -z ${WERCKER_CF_PUSH_ZDD_NO_START} ]; then
   if [[ ${WERCKER_CF_PUSH_ZDD_NO_START} == true ]]; then
     PUSH_CMD="${PUSH_CMD} --no-start"
